@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slicc's Check In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"> 
+    <style>
+        html, body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(15,15,15);
+            font-family: 'Bebas Neue', cursive;
+            color: #AAA;
+            background-image: url("img/fishnets-and-hearts.png");
+            overflow: hidden;
+        }
+        
+        .container{
+            width: 300px;
+            height: 230px;
+            background-color: red;
+            position: relative;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(30,30,30);
+            padding: 20px;
+            text-align: center;
+            /* box-shadow: 0px 0px 20px black; */
+            /* border: 1px solid #ff0069; */
+        }
+
+        .cool_button{
+            background-color: #ff0069;
+            border:none;
+            padding: 15px;
+            border-bottom: 5px solid #aa0049;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cool_button:hover{
+            background-color: white;
+            cursor: pointer;
+            color: #ff0069;
+        }
+
+        .visitor_counter{
+            color: #AAA;
+            font-size: 32px;
+        }
+
+        h1{
+            margin:0px;
+        }
+
+        .clem{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            background-color: rgb(30,30,30, .7);
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .title{
+            font-size: 44px;
+            color:white;
+        }
+
+        .anime_girl_right{
+            position: absolute;
+            right: -75%;
+            top:-15%;
+            /* transform: translate(0, -100%); */
+            display: block;
+        }
+
+        
+        .anime_girl_left{
+            position: absolute;
+            left: -75%;
+            top:-20%;
+            /* transform: translate(0, -100%); */
+            display: block;
+            /* transform: scale(-1, 1); */
+        }
+
+        @media only screen and (max-width: 600px)  {
+            .girl{
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Slicc's Check In</h1>
+        <p id="visits" class="visitor_counter">Getting Visitors</p>
+        <button id="check_in" class="cool_button">CHECK IN</button>
+        <h1 style="color:white;" id = "checked_in">YOU HAVE CHECKED IN</h1>
+
+        <img id="rem" class="anime_girl_right girl" src="./img/rem.png" width="300px">
+        <img id="ram" class="anime_girl_left girl" src="./img/ram.png" width="300px">
+    </div>
+
+    
+    <div class="clem">
+        Made with ♥️ by Clementine
+    </div>
+
+    <script>
+        function UpdateHits(shouldInc){
+            var query = shouldInc ? "hit" : "get";
+            var key = "730F75DAFD73E047B86ACB2DBD74E75DCB93272FA084A9082848F2341AA1ABB6";
+            var url = "https://api.countapi.xyz/" + query + "/" + key + "/visits";
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "json";
+            xhr.onload = function() {
+                document.getElementById('visits').innerText = "Visitors: " + this.response.value;
+            }
+            xhr.send();
+        }
+
+        var check_in = document.getElementById("check_in");
+        var checked_in = document.getElementById("checked_in");
+
+        var rem = document.getElementById("rem");
+        var ram = document.getElementById("ram");
+
+        function clear_page(){
+            check_in.style.display = "none";
+            checked_in.style.display = "none";
+        }
+
+        function make_checked_in(){
+            check_in.style.display = "none";
+            checked_in.style.display = "inline-block";
+
+            document.body.style.backgroundImage = "url('./img/dance_2.gif')";
+
+            rem.src = "./img/rem_nudie.png";
+            ram.src = "./img/ram_nudie.png";
+        }
+
+        clear_page();
+
+        var key = "visited";
+        var hasVisited = localStorage.getItem(key);
+
+        if (hasVisited === null){
+            check_in.style.display = "inline-block";
+            check_in.onclick = () => {
+                UpdateHits(true);
+                localStorage.setItem(key, true);
+                check_in.onclick = null;
+                make_checked_in();
+            };
+        }
+        else{
+            make_checked_in();
+        }
+
+        UpdateHits(false);
+
+    </script>
+</body>
+</html>
